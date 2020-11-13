@@ -536,7 +536,7 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
         }
     } else {
         fileDir = nil;
-        fileArray = @[@"驾考通iOS.txt", @"超级教练iOS.txt", @"驾考通iOS+Android.txt"];
+        fileArray = @[@"MacOS.txt", @"超级教练iOS.txt", @"驾考通iOS+Android.txt"];
         NSString *sel = [[NSUserDataManager sharedInstance] pathForKey:@"selectFileIndex_key"];
         if (sel) {
             selectFileIndex = [sel integerValue];

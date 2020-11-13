@@ -26,6 +26,8 @@
 	<string>需要桌面文件夹权限</string>
 	<key>NSFileProviderPresenceUsageDescription</key>
 	<string>需要文件写入权限</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright © 2020 wangzhicheng. All rights reserved.</string>
 	<key>NSMainStoryboardFile</key>
 	<string>Main</string>
 	<key>NSPrincipalClass</key>
