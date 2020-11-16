@@ -8,10 +8,19 @@
 
 #import <Cocoa/Cocoa.h>
 
-NS_ASSUME_NONNULL_BEGIN
+@class IconTextEditController;
 
-@interface IconTextEditController : NSViewController
+@protocol IconTextEditControllerDelegate <NSObject>
+
+@optional
+- (void)IconTextEditControllerDidFinish:(IconTextEditController *)vc;
 
 @end
 
-NS_ASSUME_NONNULL_END
+@interface IconTextEditController : NSViewController
+
+@property (nonatomic, weak) id<IconTextEditControllerDelegate> delegate;
+
+@property (nonatomic, strong) NSString *filePath;
+
+@end

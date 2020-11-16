@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+#define APP_BUNDLE_NAME         ([[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"])
+#define APP_DISPLAY_NAME        ([[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"]?:APP_BUNDLE_NAME)
+
 #define HOME_PATH           (NSHomeDirectory())
 #define DOC_PATH            ([NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject])
 #define DOCPATH(name)       ([DOC_PATH stringByAppendingPathComponent:name])
@@ -18,6 +21,11 @@
 #define PATH(name)      [PATH_DIR stringByAppendingPathComponent:name]
 #define DESKTOP(name)   [PATH_DESKTOP stringByAppendingPathComponent:name]
 #define DESKTOP_APP(name)   ([[PATH_DESKTOP stringByAppendingPathComponent:APP_DISPLAY_NAME] stringByAppendingPathComponent:name])
+
+//NSApplicationSupportDirectory
+#define APP_Support_ROOT ([NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) firstObject])
+#define APP_Support_Path(name) ([[APP_Support_ROOT stringByAppendingPathComponent:APP_DISPLAY_NAME] stringByAppendingPathComponent:name])
+
 
 extern BOOL FFCreateFolderIfNeeded(NSString *dirPath);
 

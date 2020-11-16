@@ -8,12 +8,14 @@
 #import "ViewController.h"
 #import "NSUserDataManager.h"
 #import "DTFileManager.h"
+#import "IconTextEditController.h"
 
-@interface ViewController () <NSTextFieldDelegate> {
+@interface ViewController () <NSTextFieldDelegate, IconTextEditControllerDelegate> {
     
     IBOutlet NSTextField *imageTextField;
     IBOutlet NSTextField *imageTextField2;
     
+    //用来遮挡，有时候是圆角图片，不能完成遮挡后面的textField
     IBOutlet NSView *imageShowBgView;
     IBOutlet NSImageView *imageShowView;
     
@@ -23,15 +25,18 @@
     
     IBOutlet NSPopUpButton *fileSelectBtn;
     
-    IBOutlet NSTextField *fileTextField;
+    IBOutlet NSButton *exportSameIconBtn;
+    IBOutlet NSButton *exportCustomBtn;
     
-    IBOutlet NSTextField *exportImageTextField;
-    
+    IBOutlet NSTextView *exportImageTextView;
     NSImage *_icon;
     
     NSString *fileDir;
     NSArray *fileArray;
     NSInteger selectFileIndex;
+    
+    NSInteger exportTypeIndex;
+    NSString *exportImagePath;
     
     NSMutableDictionary *_exportImageDict;
 }
@@ -45,16 +50,33 @@
 
     imageTextField.delegate = self;
     imageTextField2.delegate = self;
-    fileTextField.delegate = self;
     
     imageShowBgView.wantsLayer = YES;
     imageShowBgView.layer.backgroundColor = [NSColor whiteColor].CGColor;
     imageShowBgView.hidden = YES;
     imageTextField2.hidden = imageShowBgView.hidden;
     
+    exportImageTextView.editable = NO;
+    [exportImageTextView setAlphaValue:0.5];
+    
     [NSUserDataManager setPathForTextField:imageTextField withKey:@"imageTextField_key"];
-    [NSUserDataManager setPathForTextField:fileTextField withKey:@"fileTextField_key"];
-    [NSUserDataManager setPathForTextField:exportImageTextField withKey:@"exportImageTextField_key"];
+    
+    NSString *string = [[NSUserDataManager sharedInstance] pathForKey:@"exportImageTextField_key"];
+    exportImagePath = string;
+    
+    NSString *exportType = [[NSUserDataManager sharedInstance] pathForKey:@"exportTypeIndex_key"];
+    if (exportType) {
+        [self setExportTypeIndex:exportType.integerValue];
+    }
+    
+    NSString *sel = [[NSUserDataManager sharedInstance] pathForKey:@"selectFileIndex_key"];
+    if (sel) {
+        selectFileIndex = [sel integerValue];
+    } else {
+        selectFileIndex = 0;
+    }
+    
+    [self checkDefaultExportText];
     
     [self getFileTextArray];
 }
@@ -66,21 +88,78 @@
     [self getShowImage];
 }
 
+- (void)checkDefaultExportText
+{
+    NSString *toPath = APP_Support_Path(@"ExportText");
+    FFCreateFolderIfNeeded(toPath);
+    NSArray *array = [DTFileManager contentsWithPath:toPath];
+    if (array.count < 1) {
+        array = @[@"示例1(MacOS).txt", @"示例2(iOS).txt", @"示例3(多文件夹+圆角).txt"];
+        NSString *fromPath = [NSBundle mainBundle].resourcePath;
+        for (NSString *str in array) {
+            [DTFileManager copyItemWithPath:[fromPath stringByAppendingPathComponent:str] toPath:[toPath stringByAppendingPathComponent:str]];
+        }
+    }
+    
+    fileDir = toPath;
+}
+
+- (void)setExportTypeIndex:(NSInteger)index
+{
+    if (index == 1 && exportTypeIndex == 2) {
+        if (exportImageTextView.string.length) {
+            exportImagePath = [exportImageTextView.string mutableCopy];
+        }
+    }
+    exportTypeIndex = index;
+    exportSameIconBtn.state = index == exportSameIconBtn.tag;
+    exportCustomBtn.state = index == exportCustomBtn.tag;
+    exportImageTextView.editable = index == 2;
+    [exportImageTextView setAlphaValue:(index == 2 ? 1.f : 0.5)];
+    if (exportTypeIndex == 1) {
+        NSString *string = imageTextField.stringValue;
+        if (string.length) {
+            exportImageTextView.string = string.stringByDeletingLastPathComponent;
+        } else {
+            exportImageTextView.string = @"";
+        }
+    } else {
+        if (exportImagePath) {
+            exportImageTextView.string = exportImagePath;
+        } else {
+            exportImageTextView.string = @"";
+        }
+    }
+}
+
 - (IBAction)clearImageAction:(id)sender {
     _icon = nil;
     imageShowBgView.hidden = YES;
     imageTextField2.hidden = imageShowBgView.hidden;
     imageTextField.stringValue = @"";
     [imageTextField becomeFirstResponder];
+    if (exportTypeIndex == 1) {
+        [self setExportTypeIndex:exportTypeIndex];
+    }
 }
 
 - (IBAction)changeFileAction:(NSPopUpButton *)sender {
     selectFileIndex = sender.indexOfSelectedItem;
-    NSString *filePath = fileTextField.stringValue;
-    if (filePath.length) {
-        NSString *file = [fileArray objectAtIndex:selectFileIndex];
-        fileTextField.stringValue = [fileDir stringByAppendingPathComponent:file];
-    }
+    [[NSUserDataManager sharedInstance] setPath:[@(selectFileIndex) stringValue] forKey:@"selectFileIndex_key"];
+}
+
+- (IBAction)editTextFileAction:(id)sender {
+    NSStoryboard *sb = [NSStoryboard storyboardWithName:@"Main" bundle:nil];
+    IconTextEditController *vc = [sb instantiateControllerWithIdentifier:@"IconTextEditController"];
+    vc.delegate = self;
+    NSString *file = [fileArray objectAtIndex:selectFileIndex];
+    vc.filePath = [fileDir stringByAppendingPathComponent:file];
+    [self presentViewControllerAsSheet:vc];
+}
+
+- (IBAction)exportTypeAction:(NSButton *)sender {
+    [self setExportTypeIndex:sender.tag];
+    [[NSUserDataManager sharedInstance] setPath:[@(exportTypeIndex) stringValue] forKey:@"exportTypeIndex_key"];
 }
 
 - (IBAction)exportImageAction:(id)sender {
@@ -101,17 +180,19 @@
     
     NSString *imagePath = imageTextField.stringValue;
     
-    NSString *toDir = exportImageTextField.stringValue;
-    if (toDir.length <= 0) {
-        toDir = DESKTOP(@"IconTool");
+    NSString *exportDir = exportImageTextView.string;
+    if (exportDir.length <= 0) {
+        [self showAlertTitle:@"请输入导出图片的地址" message:@"或选择导出到当前ICON的同级目录下" btnTitles:nil handler:^(NSModalResponse returnCode) {
+            
+        }];
+        return;
     }
-    FFCreateFolderIfNeeded(toDir);
     
-    [self checkDefaultTextField];
+    FFCreateFolderIfNeeded(exportDir);
     
-    [NSUserDataManager savePathFromTextField:fileTextField withKey:@"fileTextField_key"];
-    [NSUserDataManager savePathFromTextField:exportImageTextField withKey:@"exportImageTextField_key"];
-    [[NSUserDataManager sharedInstance] setPath:[@(selectFileIndex) stringValue] forKey:@"selectFileIndex_key"];
+    if (exportTypeIndex == 2) {
+        [[NSUserDataManager sharedInstance] setPath:exportImageTextView.string forKey:@"exportImageTextField_key"];
+    }
     
     _exportImageDict = [NSMutableDictionary dictionary];
     NSString *file = [fileArray objectAtIndex:selectFileIndex];
@@ -119,9 +200,9 @@
     NSMutableArray *renameArr = [NSMutableArray array];
     NSMutableDictionary *radiusIcons = [NSMutableDictionary dictionary];
     [exportDict enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSArray *arr, BOOL *stop) {
-        NSString *toPath = toDir;
+        NSString *toPath = exportDir;
         if (![key isEqualToString:fileName]) {
-            toPath = [toDir stringByAppendingPathComponent:fileName];
+            toPath = [exportDir stringByAppendingPathComponent:fileName];
             FFCreateFolderIfNeeded(toPath);
         }
         toPath = [toPath stringByAppendingPathComponent:key];
@@ -242,33 +323,6 @@
         }
     }
     return nil;
-}
-
-- (void)checkDefaultTextField
-{
-    NSString *toDir = DESKTOP(@"IconTool");
-    if (fileTextField.stringValue.length <= 0) {
-        NSString *path = [toDir stringByAppendingPathComponent:@"格式说明"];
-        if (![DTFileManager isFileExist:path]) {
-            FFCreateFolderIfNeeded(toDir);
-            FFCreateFolderIfNeeded(path);
-            
-            NSString *fromPath = [NSBundle mainBundle].resourcePath;
-            for (NSString *str in fileArray) {
-                [DTFileManager copyItemWithPath:[fromPath stringByAppendingPathComponent:str] toPath:[path stringByAppendingPathComponent:str]];
-            }
-            
-            NSString *str = @"README.txt";
-            [DTFileManager copyItemWithPath:[fromPath stringByAppendingPathComponent:str] toPath:[path stringByAppendingPathComponent:str]];
-        }
-        
-        NSString *file = [fileArray objectAtIndex:selectFileIndex];
-        fileTextField.stringValue = [path stringByAppendingPathComponent:file];
-    }
-    
-    if (exportImageTextField.stringValue.length <= 0) {
-        exportImageTextField.stringValue = toDir;
-    }
 }
 
 - (void)showAlertTitle:(NSString *)title message:(NSString *)message btnTitles:(NSArray *)btnTitles handler:(void (^)(NSModalResponse returnCode))handler
@@ -478,8 +532,6 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
 {
     if (obj.object == imageTextField) {
         [self getShowImage];
-    } else if (obj.object == fileTextField) {
-        [self getFileTextArray];
     } else if (obj.object == imageTextField2) {
         if (imageTextField2.stringValue.length) {
             _icon = nil;
@@ -508,49 +560,49 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
             imageTextField.stringValue = @"";
             [imageTextField becomeFirstResponder];
         }
+        if (exportTypeIndex == 1) {
+            [self setExportTypeIndex:exportTypeIndex];
+        }
     }
 }
 
 - (void)getFileTextArray
 {
-    NSString *filePath = fileTextField.stringValue;
-    if (filePath.length) {
-        fileDir = filePath;
-        if (![DTFileManager isFileDirectory:fileDir]) {
-            fileDir = [filePath stringByDeletingLastPathComponent];
-        }
-        fileArray = [DTFileManager contentsWithPath:fileDir];
-        int i= 0;
-        selectFileIndex = 0;
-        NSString *file = [filePath lastPathComponent];
-        for (NSString *str in fileArray) {
-            if ([str isEqualToString:file]) {
-                selectFileIndex = i;
-                break;
-            }
-            i++;
-        }
-        if (fileArray.count == 0) {
-            fileTextField.stringValue = @"";
-            [self getFileTextArray];
-        }
-    } else {
-        fileDir = nil;
-        fileArray = @[@"MacOS.txt", @"超级教练iOS.txt", @"驾考通iOS+Android.txt"];
-        NSString *sel = [[NSUserDataManager sharedInstance] pathForKey:@"selectFileIndex_key"];
-        if (sel) {
-            selectFileIndex = [sel integerValue];
-        } else {
-            selectFileIndex = 2;
-        }
-        if (selectFileIndex > fileArray.count - 1) {
-            selectFileIndex = fileArray.count - 1;
-        }
+    NSString *fileMark = nil;
+    if (fileArray.count) {
+        fileMark = [fileArray objectAtIndex:selectFileIndex];
+    }
+    
+    fileArray = [DTFileManager contentsWithPath:fileDir];
+    fileArray = [fileArray sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        return [obj1 compare:obj2];
+    }];
+    
+    if (fileMark.length && [fileArray containsObject:fileMark]) {
+        selectFileIndex = [fileArray indexOfObject:fileMark];
+    }
+    
+    if (selectFileIndex > fileArray.count - 1) {
+        selectFileIndex = fileArray.count - 1;
     }
     [fileSelectBtn removeAllItems];
-    [fileSelectBtn addItemsWithTitles:fileArray];
+    
+    NSMutableArray *array = [NSMutableArray array];
+    for (NSString *str in fileArray) {
+        if ([str hasSuffix:@".txt"]) {
+            [array addObject:[str componentsSeparatedByString:@"."].firstObject];
+        }
+    }
+    
+    [fileSelectBtn addItemsWithTitles:array];
     [fileSelectBtn selectItemAtIndex:selectFileIndex];
 }
 
+#pragma mark - IconTextEditControllerDelegate
+
+- (void)IconTextEditControllerDidFinish:(IconTextEditController *)vc
+{
+    [self getFileTextArray];
+}
 
 @end

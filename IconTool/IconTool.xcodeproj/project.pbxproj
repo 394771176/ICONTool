@@ -12,13 +12,14 @@
 		60D90297255A28A000C383EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60D90296255A28A000C383EE /* Assets.xcassets */; };
 		60D9029A255A28A000C383EE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60D90298255A28A000C383EE /* Main.storyboard */; };
 		60D9029D255A28A000C383EE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 60D9029C255A28A000C383EE /* main.m */; };
-		60D902AA255A326E00C383EE /* 驾考通iOS+Android.txt in Resources */ = {isa = PBXBuildFile; fileRef = 60D902A7255A326E00C383EE /* 驾考通iOS+Android.txt */; };
-		60D902AB255A326E00C383EE /* MacOS.txt in Resources */ = {isa = PBXBuildFile; fileRef = 60D902A8255A326E00C383EE /* MacOS.txt */; };
-		60D902AC255A326E00C383EE /* 超级教练iOS.txt in Resources */ = {isa = PBXBuildFile; fileRef = 60D902A9255A326E00C383EE /* 超级教练iOS.txt */; };
+		60D902AA255A326E00C383EE /* 示例3(多文件夹+圆角).txt in Resources */ = {isa = PBXBuildFile; fileRef = 60D902A7255A326E00C383EE /* 示例3(多文件夹+圆角).txt */; };
+		60D902AB255A326E00C383EE /* 示例1(MacOS).txt in Resources */ = {isa = PBXBuildFile; fileRef = 60D902A8255A326E00C383EE /* 示例1(MacOS).txt */; };
+		60D902AC255A326E00C383EE /* 示例2(iOS).txt in Resources */ = {isa = PBXBuildFile; fileRef = 60D902A9255A326E00C383EE /* 示例2(iOS).txt */; };
 		60D902B6255A381800C383EE /* DTFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 60D902B2255A381800C383EE /* DTFileManager.m */; };
 		60D902B7255A381800C383EE /* NSUserDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 60D902B3255A381800C383EE /* NSUserDataManager.m */; };
 		60D902CB255BA98B00C383EE /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 60D902CA255BA98B00C383EE /* README.txt */; };
 		60D90456255E8A7900C383EE /* IconTextEditController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60D90455255E8A7900C383EE /* IconTextEditController.m */; };
+		60D9045B2562501400C383EE /* SaveAsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60D9045A2562501400C383EE /* SaveAsController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,9 +33,9 @@
 		60D9029B255A28A000C383EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		60D9029C255A28A000C383EE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		60D9029E255A28A000C383EE /* IconTool.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = IconTool.entitlements; sourceTree = "<group>"; };
-		60D902A7255A326E00C383EE /* 驾考通iOS+Android.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "驾考通iOS+Android.txt"; sourceTree = "<group>"; };
-		60D902A8255A326E00C383EE /* MacOS.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MacOS.txt; sourceTree = "<group>"; };
-		60D902A9255A326E00C383EE /* 超级教练iOS.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "超级教练iOS.txt"; sourceTree = "<group>"; };
+		60D902A7255A326E00C383EE /* 示例3(多文件夹+圆角).txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "示例3(多文件夹+圆角).txt"; sourceTree = "<group>"; };
+		60D902A8255A326E00C383EE /* 示例1(MacOS).txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "示例1(MacOS).txt"; sourceTree = "<group>"; };
+		60D902A9255A326E00C383EE /* 示例2(iOS).txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "示例2(iOS).txt"; sourceTree = "<group>"; };
 		60D902AF255A381800C383EE /* DTFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTFileManager.h; sourceTree = "<group>"; };
 		60D902B0255A381800C383EE /* NSUserDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSUserDataManager.h; sourceTree = "<group>"; };
 		60D902B2255A381800C383EE /* DTFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTFileManager.m; sourceTree = "<group>"; };
@@ -42,6 +43,8 @@
 		60D902CA255BA98B00C383EE /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		60D90454255E8A7900C383EE /* IconTextEditController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IconTextEditController.h; sourceTree = "<group>"; };
 		60D90455255E8A7900C383EE /* IconTextEditController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IconTextEditController.m; sourceTree = "<group>"; };
+		60D904592562501400C383EE /* SaveAsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SaveAsController.h; sourceTree = "<group>"; };
+		60D9045A2562501400C383EE /* SaveAsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SaveAsController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +84,8 @@
 				60D90294255A289D00C383EE /* ViewController.m */,
 				60D90454255E8A7900C383EE /* IconTextEditController.h */,
 				60D90455255E8A7900C383EE /* IconTextEditController.m */,
+				60D904592562501400C383EE /* SaveAsController.h */,
+				60D9045A2562501400C383EE /* SaveAsController.m */,
 				60D902A5255A302300C383EE /* Resources */,
 				60D90296255A28A000C383EE /* Assets.xcassets */,
 				60D90298255A28A000C383EE /* Main.storyboard */,
@@ -95,9 +100,9 @@
 			isa = PBXGroup;
 			children = (
 				60D902CA255BA98B00C383EE /* README.txt */,
-				60D902A9255A326E00C383EE /* 超级教练iOS.txt */,
-				60D902A8255A326E00C383EE /* MacOS.txt */,
-				60D902A7255A326E00C383EE /* 驾考通iOS+Android.txt */,
+				60D902A9255A326E00C383EE /* 示例2(iOS).txt */,
+				60D902A8255A326E00C383EE /* 示例1(MacOS).txt */,
+				60D902A7255A326E00C383EE /* 示例3(多文件夹+圆角).txt */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -170,10 +175,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60D902AC255A326E00C383EE /* 超级教练iOS.txt in Resources */,
+				60D902AC255A326E00C383EE /* 示例2(iOS).txt in Resources */,
 				60D90297255A28A000C383EE /* Assets.xcassets in Resources */,
-				60D902AA255A326E00C383EE /* 驾考通iOS+Android.txt in Resources */,
-				60D902AB255A326E00C383EE /* MacOS.txt in Resources */,
+				60D902AA255A326E00C383EE /* 示例3(多文件夹+圆角).txt in Resources */,
+				60D902AB255A326E00C383EE /* 示例1(MacOS).txt in Resources */,
 				60D902CB255BA98B00C383EE /* README.txt in Resources */,
 				60D9029A255A28A000C383EE /* Main.storyboard in Resources */,
 			);
@@ -191,6 +196,7 @@
 				60D9029D255A28A000C383EE /* main.m in Sources */,
 				60D90292255A289D00C383EE /* AppDelegate.m in Sources */,
 				60D902B6255A381800C383EE /* DTFileManager.m in Sources */,
+				60D9045B2562501400C383EE /* SaveAsController.m in Sources */,
 				60D90456255E8A7900C383EE /* IconTextEditController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -328,13 +334,13 @@
 				CODE_SIGN_ENTITLEMENTS = IconTool/IconTool.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = IconTool/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chelun.IconTool;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -348,13 +354,13 @@
 				CODE_SIGN_ENTITLEMENTS = IconTool/IconTool.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = IconTool/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chelun.IconTool;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
