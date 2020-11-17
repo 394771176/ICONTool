@@ -844,6 +844,9 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="helpAction:" target="XfG-lQ-9wD" id="x6o-wi-0Ec"/>
+                                </connections>
                             </button>
                             <button verticalHuggingPriority="750" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="eR4-Dj-Tcl">
                                 <rect key="frame" x="307" y="143" width="96" height="18"/>
@@ -1091,7 +1094,7 @@
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="em2-rb-5GF">
                                 <rect key="frame" x="28" y="77" width="54" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="另存为：" id="UNy-93-gq1">
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="另存为：" id="UNy-93-gq1">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1128,6 +1131,7 @@
                     </view>
                     <connections>
                         <outlet property="nameTextField" destination="9hM-om-w9c" id="pSs-Xe-9ha"/>
+                        <outlet property="titleLabel" destination="em2-rb-5GF" id="Mny-gM-SFh"/>
                     </connections>
                 </viewController>
                 <customObject id="zuH-Wj-ruc" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

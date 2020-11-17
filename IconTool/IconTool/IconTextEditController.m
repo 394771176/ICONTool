@@ -61,23 +61,35 @@
 
 - (IBAction)saveAction:(id)sender
 {
-    NSString *toPath = self.filePath;
-    NSString *string = fileTextView.string;
-    if (string.length && toPath.length) {
-        [string writeToFile:toPath atomically:YES encoding:NSUTF8StringEncoding error:NULL];
-    }
-    [self didEditFinish];
+    NSStoryboard *sb = [NSStoryboard storyboardWithName:@"Main" bundle:nil];
+    SaveAsController *vc = [sb instantiateControllerWithIdentifier:@"SaveAsController"];
+    vc.delegate = self;
+    vc.type = 1;
+    vc.filePath = self.filePath;
+    [self presentViewControllerAsSheet:vc];
 }
 
 - (IBAction)saveAsAction:(id)sender {
     NSStoryboard *sb = [NSStoryboard storyboardWithName:@"Main" bundle:nil];
     SaveAsController *vc = [sb instantiateControllerWithIdentifier:@"SaveAsController"];
     vc.delegate = self;
+    vc.filePath = self.filePath;
     [self presentViewControllerAsSheet:vc];
 }
 
 - (void)SaveAsControllerDidSubmitAction:(SaveAsController *)vc withName:(NSString *)name
 {
+    if (name.length < 1) {
+        return;
+    }
+    
+    if (vc.type == 1) {
+        NSString *oldName = [DTFileManager fileNameFromPath:self.filePath];
+        if (![oldName isEqual:name]) {
+            [DTFileManager deleteItemWithPath:self.filePath];
+        }
+    }
+    
     NSString *toPath = self.filePath.stringByDeletingLastPathComponent;
     NSString *string = fileTextView.string;
     if (string.length && toPath.length && name.length) {

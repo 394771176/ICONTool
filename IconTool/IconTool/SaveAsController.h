@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SaveAsController : NSViewController
 
 @property (nonatomic, weak) id<SaveAsControllerDelegate> delegate;
+@property (nonatomic, strong) NSString *filePath;
+@property (nonatomic, assign) NSInteger type;//0 另存为， 1保存替换原文件
 
 @end
 

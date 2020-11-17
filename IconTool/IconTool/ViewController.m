@@ -142,6 +142,15 @@
         [self setExportTypeIndex:exportTypeIndex];
     }
 }
+- (IBAction)helpAction:(id)sender {
+    
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"README" ofType:@"txt"];
+    NSString *string = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
+    
+    [self showAlertTitle:@"尺寸文件说明" message:string btnTitles:nil handler:^(NSModalResponse returnCode) {
+        
+    }];
+}
 
 - (IBAction)changeFileAction:(NSPopUpButton *)sender {
     selectFileIndex = sender.indexOfSelectedItem;
@@ -197,16 +206,18 @@
     _exportImageDict = [NSMutableDictionary dictionary];
     NSString *file = [fileArray objectAtIndex:selectFileIndex];
     NSString *fileName = [DTFileManager fileNameFromPath:file];
+    NSString *imageName = [DTFileManager fileNameFromPath:imagePath];
     NSMutableArray *renameArr = [NSMutableArray array];
     NSMutableDictionary *radiusIcons = [NSMutableDictionary dictionary];
+    NSString *exportPath = [exportDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_%@", imageName, fileName]];
+    FFCreateFolderIfNeeded(exportPath);
     [exportDict enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSArray *arr, BOOL *stop) {
-        NSString *toPath = exportDir;
+        NSString *toPath = [exportPath copy];
         if (![key isEqualToString:fileName]) {
-            toPath = [exportDir stringByAppendingPathComponent:fileName];
+            toPath = [exportPath stringByAppendingPathComponent:key];
             FFCreateFolderIfNeeded(toPath);
         }
-        toPath = [toPath stringByAppendingPathComponent:key];
-        FFCreateFolderIfNeeded(toPath);
+        
         NSMutableArray *imageNames = [NSMutableArray array];
         [arr enumerateObjectsUsingBlock:^(NSDictionary *dict, NSUInteger idx, BOOL *stop) {
             NSString *name = [dict objectForKey:@"name"];
@@ -253,6 +264,24 @@
     if (renameArr.count) {
         [self showAlertTitle:@"图片命名重复" message:[renameArr componentsJoinedByString:@"\n"] btnTitles:nil handler:^(NSModalResponse returnCode) {
             
+        }];
+    } else {
+        [self showAlertTitle:@"导出图片成功" message:exportPath btnTitles:@[@"OK", @"OPEN"] handler:^(NSModalResponse returnCode) {
+//            NSOpenPanel *op = [[NSOpenPanel alloc] init];
+//            op.canChooseFiles = NO;
+//            op.canChooseDirectories = YES;
+//            op.directoryURL = [NSURL fileURLWithPath:exportPath];
+//            [op beginWithCompletionHandler:^(NSModalResponse result) {
+//
+//            }];
+
+            if (returnCode == NSAlertFirstButtonReturn) {
+                
+            } else if (returnCode == NSAlertSecondButtonReturn) {
+                NSURL * url = [NSURL fileURLWithPath:exportPath];
+                NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
+                [workspace openURL:url];
+            }
         }];
     }
 }
@@ -578,6 +607,16 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
         return [obj1 compare:obj2];
     }];
     
+    NSMutableArray *array = [NSMutableArray array];
+    NSMutableArray *fileArr = [NSMutableArray array];
+    for (NSString *str in fileArray) {
+        if ([str hasSuffix:@".txt"]) {
+            [array addObject:[str componentsSeparatedByString:@"."].firstObject];
+            [fileArr addObject:str];
+        }
+    }
+    fileArray = fileArr;
+    
     if (fileMark.length && [fileArray containsObject:fileMark]) {
         selectFileIndex = [fileArray indexOfObject:fileMark];
     }
@@ -585,15 +624,8 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
     if (selectFileIndex > fileArray.count - 1) {
         selectFileIndex = fileArray.count - 1;
     }
+
     [fileSelectBtn removeAllItems];
-    
-    NSMutableArray *array = [NSMutableArray array];
-    for (NSString *str in fileArray) {
-        if ([str hasSuffix:@".txt"]) {
-            [array addObject:[str componentsSeparatedByString:@"."].firstObject];
-        }
-    }
-    
     [fileSelectBtn addItemsWithTitles:array];
     [fileSelectBtn selectItemAtIndex:selectFileIndex];
 }

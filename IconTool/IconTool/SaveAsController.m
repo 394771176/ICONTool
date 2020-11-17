@@ -7,9 +7,11 @@
 //
 
 #import "SaveAsController.h"
+#import "DTFileManager.h"
 
 @interface SaveAsController () {
     
+    IBOutlet NSTextField *titleLabel;
     IBOutlet NSTextField *nameTextField;
 }
 
@@ -20,6 +22,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do view setup here.
+    
+    if (_type == 1) {
+        titleLabel.stringValue = @"保存：";
+    }
+    
+    NSString *string = [DTFileManager fileNameFromPath:self.filePath];
+    if (string.length) {
+        nameTextField.stringValue = string;
+        if ([nameTextField respondsToSelector:@selector(selectAll:)]) {
+            [nameTextField performSelector:@selector(selectAll:) withObject:nil afterDelay:.1f];
+        } else {
+            nameTextField.accessibilitySelectedTextRange = NSMakeRange(0, string.length);
+        }
+    }
 }
 
 - (IBAction)submitAction:(id)sender {
