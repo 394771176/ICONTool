@@ -67,6 +67,8 @@
     NSString *exportType = [[NSUserDataManager sharedInstance] pathForKey:@"exportTypeIndex_key"];
     if (exportType) {
         [self setExportTypeIndex:exportType.integerValue];
+    } else {
+        [self setExportTypeIndex:1];
     }
     
     NSString *sel = [[NSUserDataManager sharedInstance] pathForKey:@"selectFileIndex_key"];
